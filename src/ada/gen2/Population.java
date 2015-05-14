@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ada.gen;
+package ada.gen2;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -16,7 +16,7 @@ import java.util.Collections;
 class Population {
 
     public ArrayList<Individual> individuals;
-    private Backpack bp;
+    private CityMap cm;
     private boolean sorted;
 
     public Population(ArrayList<Individual> individuals) {
@@ -31,12 +31,12 @@ class Population {
 
     public Population(Population old) {
         individuals = new ArrayList();
-        bp = old.getBackpack();
+        cm = old.getCityMap();
         sorted=false;
 //        for (int i = 0; i < old.size(); i++) {
-//            BitSet bs = new BitSet(bp.getItems().size());
-//            Individual inew = new Individual(bs, bp.getItems().size());
-//            inew.setBackpack(bp);
+//            BitSet bs = new BitSet(cm.getItems().size());
+//            Individual inew = new Individual(bs, cm.getItems().size());
+//            inew.setCityMap(cm);
 //            individuals.add(inew);
 //        }
     }
@@ -60,12 +60,12 @@ class Population {
         return individuals.size();
     }
 
-    public void setBackpack(Backpack bp) {
-        this.bp = bp;
+    public void setCityMap(CityMap cm) {
+        this.cm = cm;
     }
 
-    public Backpack getBackpack() {
-        return this.bp;
+    public CityMap getCityMap() {
+        return this.cm;
     }
 
     public ArrayList<Individual> getIndividuals() {
@@ -79,12 +79,12 @@ class Population {
     public Individual getFittest() {
         Individual ret = individuals.get(0);
         //System.out.println("indiv[0]" + ret);
-        if(bp == null) {
-            System.out.println("Backpack is null. Terminate");
+        if(cm == null) {
+            System.out.println("CityMap is null. Terminate");
             System.exit(2);
         }
         for (Individual in : individuals) {
-            double retfit = Fitness.getFitness(ret, bp), infit = Fitness.getFitness(in, bp);
+            double retfit = Fitness.getFitness(ret, cm), infit = Fitness.getFitness(in, cm);
             if (retfit < infit) {
                 ret = in;
             }
@@ -99,7 +99,7 @@ class Population {
         for (int i = 0; i < count ; i++) {
            ret.saveIndividual(individuals.get(i));
         }
-        ret.setBackpack(bp);
+        ret.setCityMap(cm);
         return ret;
     }
     

@@ -5,13 +5,15 @@
  */
 package ada.gen2;
 
+import java.io.IOException;
+
 /**
  *
  * @author Marek
  */
 public class AdAGen2 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         Algorithm a = new Algorithm();
         a.init(args);

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ada.gen;
+package ada.gen2;
 
 /**
  *
@@ -11,31 +11,22 @@ package ada.gen;
  */
 public class Fitness {
 
-    private Backpack bp;
+    private CityMap cm;
 
-    public Fitness(Backpack bp) {
-        this.bp = bp;
+    public Fitness(CityMap cm) {
+        this.cm = cm;
     }
 
-    public static double getFitness(Individual gene, Backpack bp) {
+    public static double getFitness(Individual gene, CityMap cm) {
         double fitness = 0, total_size = 0;
-        if(bp == null ) {
-            System.out.println("Backpack is NULL. Terminate 3");
+        if(cm == null ) {
+            System.out.println("CityMap is NULL. Terminate 3");
         System.exit(3);
     }
                     
         for (int i = 0; i < gene.length(); i++) {
             if (gene.getItem(i)) {
-                if (total_size + bp.getSize(i) > bp.getCapacity()) {
-                    //System.out.println("Backpack is full, size=" + total_size + ", value=" + fitness);
-                    gene.regenerate();
-                    //System.out.println("New gen=" + gene.toString());
-                    fitness = total_size = 0;
-                    i=-1;
-                    continue;
-                }
-                fitness += bp.getValue(i);
-                total_size += bp.getSize(i);
+               
             }
         }
         return (double)Math.round(fitness * 10) / 10;
@@ -44,7 +35,7 @@ public class Fitness {
     public double CalcFitness(Population pop) {
         double fitness = 0;
         for (Individual gene : pop.getIndividuals()) {
-            fitness += getFitness(gene,bp);
+            fitness += getFitness(gene,cm);
         }
         fitness /= pop.size();
         return fitness;

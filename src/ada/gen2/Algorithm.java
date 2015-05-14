@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ada.gen;
+package ada.gen2;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -31,7 +31,7 @@ public class Algorithm {
     private double mutationRate;
     private int selectionType;
     private int elitism;
-    private int total_packages;
+    private int total_cities;
 
     public Algorithm() {
     }
@@ -91,7 +91,7 @@ public class Algorithm {
         try {
             writer = new PrintWriter(outputFile, "UTF-8");
             Scanner scanner = new Scanner(everything);
-            for (int i = 0; i < total_packages + 2; i++) {
+            for (int i = 0; i < total_cities + 2; i++) {
                 writer.println(scanner.nextLine());
             }
             writer.println(individual_count);
@@ -121,18 +121,19 @@ public class Algorithm {
             }
             String everything = sb.toString();
             Scanner scanner = new Scanner(everything);
-            double total_capacity = Double.parseDouble(scanner.nextLine());
-            total_packages = Integer.parseInt(scanner.nextLine());
-            ArrayList<Item> packages = new ArrayList();
-            for (int i = 0; i < total_packages; i++) {
+            total_cities = Integer.parseInt(scanner.nextLine());
+            CityMap cm = CityMap.getInstance(total_cities);
+            
+            for (int i = 0; i < total_cities-1; i++) {
                 String[] spl = scanner.nextLine().split(" ");
-                double size = Double.parseDouble(spl[0]);
-                double value = Double.parseDouble(spl[1]);
-
-                packages.add(new Item(size, value));
+                for (int j = 0; j < spl.length; j++) {
+                int distance = Integer.parseInt(spl[j]);
+                cm.add(distance);
+                }
             }
-            Backpack bp;
-            bp = Backpack.getInstance(total_capacity, packages);
+            
+            System.out.println(cm);
+            
             int population_size = Integer.parseInt(scanner.nextLine());
             ArrayList<Individual> population = new ArrayList();
             if (individual_count == 0) {
@@ -140,24 +141,24 @@ public class Algorithm {
                 individual_count = population_size;
                 for (int i = 0; i < population_size; i++) {
                     String[] s = scanner.nextLine().split(" ");
-                    BitSet bs = new BitSet(total_packages);
-                    for (int j = 0; j < total_packages; j++) {
+                    BitSet bs = new BitSet(total_cities);
+                    for (int j = 0; j < total_cities; j++) {
                         if (s[j].equals("1")) {
                             bs.set(j);
                         }
                     }
-                    Individual inew = new Individual(bs, total_packages, bp);
+                    Individual inew = new Individual(bs, total_cities, cm);
                     population.add(inew);
                 }
             } else {
                 //we have to generate random population
                 Random rand = new Random();
                 for (int i = 0; i < individual_count; i++) {
-                    BitSet bs = new BitSet(total_packages);
-                    for (int j = 0; j < total_packages; j++) {
+                    BitSet bs = new BitSet(total_cities);
+                    for (int j = 0; j < total_cities; j++) {
                         bs.set(j, rand.nextInt(2) == 1);
                     }
-                    Individual inew = new Individual(bs, total_packages, bp);
+                    Individual inew = new Individual(bs, total_cities, cm);
                     population.add(inew);
                 }
             }
@@ -170,11 +171,10 @@ public class Algorithm {
             //Create output file
             createOutputFile(everything, pop);
 
-            pop.setBackpack(bp);
+            pop.setCityMap(cm);
             String toPrint = "";
-            toPrint += "total capacity: " + total_capacity + "\n";
-            toPrint += "total packages: " + total_packages + "\n";
-            toPrint += bp.toString();
+            toPrint += "total packages: " + total_cities + "\n";
+            toPrint += cm.toString();
             //toPrint += pop.toString();
             System.out.println(toPrint);
 

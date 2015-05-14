@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ada.gen;
+package ada.gen2;
 
 import java.util.BitSet;
 import java.util.Random;
@@ -17,18 +17,18 @@ public class Individual {
     private BitSet gene;
     private int geneLength;
     private double fitness = 0;
-    private Backpack bp;
+    private CityMap cm;
 
-    public Individual(BitSet gene, int length, Backpack bp) {
+    public Individual(BitSet gene, int length, CityMap cm) {
         this.gene = gene;
         this.geneLength = length;
-        this.bp = bp;
+        this.cm = cm;
     }
 
-    public Individual(int length, Backpack bp) {
+    public Individual(int length, CityMap cm) {
         this.gene = new BitSet(length);
         this.geneLength = length;
-        this.bp = bp;
+        this.cm = cm;
     }
 
     public BitSet getGene() {
@@ -39,8 +39,8 @@ public class Individual {
         this.gene = gene;
     }
 
-    public Backpack getBackpack() {
-        return bp;
+    public CityMap getCityMap() {
+        return cm;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class Individual {
 
     public double getFitness() {
         if (fitness == 0) {
-            fitness = Fitness.getFitness(this, bp);
+            fitness = Fitness.getFitness(this, cm);
         }
         return fitness;
     }

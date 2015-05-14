@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ada.gen;
+package ada.gen2;
 
 import java.util.Random;
 
@@ -85,7 +85,7 @@ public class GeneticAlgorithm {
 
     // Crossover individuals
     private static Individual crossover(Individual indiv1, Individual indiv2) {
-        Individual newSol = new Individual(indiv1.length(), indiv1.getBackpack());
+        Individual newSol = new Individual(indiv1.length(), indiv1.getCityMap());
         // Loop through genes
         for (int i = 0; i < indiv1.length(); i++) {
             // Crossover
