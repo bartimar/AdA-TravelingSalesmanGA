@@ -5,6 +5,7 @@
  */
 package ada.gen2;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Random;
 
@@ -14,28 +15,25 @@ import java.util.Random;
  */
 public class Individual {
 
-    private BitSet gene;
-    private int geneLength;
-    private double fitness = 0;
+    private ArrayList<Integer> gene;
+    private int fitness = 0;
     private CityMap cm;
 
-    public Individual(BitSet gene, int length, CityMap cm) {
+    public Individual(ArrayList<Integer> gene, CityMap cm) {
         this.gene = gene;
-        this.geneLength = length;
         this.cm = cm;
     }
 
-    public Individual(int length, CityMap cm) {
-        this.gene = new BitSet(length);
-        this.geneLength = length;
+    public Individual(CityMap cm) {
+        this.gene = new ArrayList();
         this.cm = cm;
     }
 
-    public BitSet getGene() {
+    public ArrayList<Integer> getGene() {
         return gene;
     }
 
-    public void setGene(BitSet gene) {
+    public void setGene(ArrayList<Integer> gene) {
         this.gene = gene;
     }
 
@@ -46,44 +44,55 @@ public class Individual {
     @Override
     public String toString() {
         String ret = "Individual{" + "gene=";
-        for (int i = 0; i < geneLength; i++) {
-            ret += gene.get(i) ? "1" : "0";
+        for (int i = 0; i < gene.size(); i++) {
+            ret += gene.get(i) + " ";
         }
         ret += "}";
         return ret;
     }
-    
-     public String print() {
+
+    public String print() {
         String ret = "";
-        for (int i = 0; i < geneLength; i++) {
-            ret += gene.get(i) ? "1" : "0";
-            if(i+1<geneLength) ret+= " ";
+        for (int i = 0; i < gene.size(); i++) {
+            ret += gene.get(i);
+            if (i + 1 < gene.size()) {
+                ret += " ";
+            }
         }
-        return ret;
+        return ret.trim();
     }
 
-    public double getFitness() {
+    public int getFitness() {
         if (fitness == 0) {
             fitness = Fitness.getFitness(this, cm);
         }
         return fitness;
     }
 
-    public boolean getItem(int index) {
+    public int getItem(int index) {
         return gene.get(index);
     }
 
-    public void setItem(int index, boolean val) {
-        gene.set(index, val);
+    public void setItem(int index, int val) {
+        if (index >= gene.size()) {
+            gene.add(val);
+        } else {
+            gene.set(index, val);
+        }
     }
+
+    public void addItem(int val) {
+        gene.add(val);
+    }
+// tohle bude spatne
 
     public void regenerate() {
         Random randomGenerator = new Random();
         for (;;) {
-            int idx = randomGenerator.nextInt(geneLength);
+            int idx = randomGenerator.nextInt(gene.size());
             //System.out.println("idx=" + idx);
-            if (gene.get(idx)) {
-                gene.clear(idx);
+            if (gene.get(idx) == 0) {
+                gene.set(idx, 1);
                 break;
             }
         }
@@ -91,6 +100,6 @@ public class Individual {
     }
 
     public int length() {
-        return geneLength;
+        return gene.size();
     }
 }

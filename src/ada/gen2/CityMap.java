@@ -21,18 +21,32 @@ public class CityMap {
     private CityMap(int total_cities) {
         this.total_cities = total_cities;
         cities = new ArrayList<ArrayList<Integer>>();
-        for(int i = 0; i< total_cities-1; i++) cities.add(new ArrayList<Integer>());
+        for (int i = 0; i < total_cities - 1; i++) {
+            cities.add(new ArrayList<Integer>());
+        }
         filled = 0;
     }
-    
+
     public void add(int distance) {
-    cities.get(filled).add(distance);
-    if(cities.get(filled).size()+filled >= total_cities-1) filled++;        
+        cities.get(filled).add(distance);
+        if (cities.get(filled).size() + filled >= total_cities - 1) {
+            filled++;
+        }
     }
-    
+
+    public int getDist(int c1, int c2) { //E.g. 3,4 -> 2,0
+        if (c1 > c2) {
+            int tmp = c1;
+            c1 = c2;
+            c2 = tmp;
+        }
+        if(c1 <= 0 || c2<= 0) System.out.println("c1=" + c1 + " c2=" + c2);
+        return cities.get(c1 - 1).get(c2 - 1 - c1);
+    }
+
     public static CityMap getInstance(int total_cities) {
-        if(instance==null) {
-           instance = new CityMap(total_cities); 
+        if (instance == null) {
+            instance = new CityMap(total_cities);
         }
         return instance;
     }

@@ -17,23 +17,26 @@ public class Fitness {
         this.cm = cm;
     }
 
-    public static double getFitness(Individual gene, CityMap cm) {
-        double fitness = 0, total_size = 0;
-        if(cm == null ) {
+    public static int getFitness(Individual gene, CityMap cm) {
+        int fitness = 0;
+        if (cm == null) {
             System.out.println("CityMap is NULL. Terminate 3");
-        System.exit(3);
-    }
+            System.exit(3);
+        }
                     
         for (int i = 0; i < gene.length(); i++) {
-            if (gene.getItem(i)) {
-               
-            }
+            int dist, city = gene.getItem(i), nextCity;
+            if(i+1>= gene.length())nextCity = gene.getItem(0);
+            else nextCity = gene.getItem(i+1);
+            if(city==0 || nextCity==0) System.out.println(gene);
+            dist = cm.getDist(city,nextCity);
+            fitness += dist;
         }
-        return (double)Math.round(fitness * 10) / 10;
+        return fitness;
     }
  
     public double CalcFitness(Population pop) {
-        double fitness = 0;
+        int fitness = 0;
         for (Individual gene : pop.getIndividuals()) {
             fitness += getFitness(gene,cm);
         }

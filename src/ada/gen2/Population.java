@@ -84,8 +84,8 @@ class Population {
             System.exit(2);
         }
         for (Individual in : individuals) {
-            double retfit = Fitness.getFitness(ret, cm), infit = Fitness.getFitness(in, cm);
-            if (retfit < infit) {
+            int retfit = Fitness.getFitness(ret, cm), infit = Fitness.getFitness(in, cm);
+            if (retfit > infit) {
                 ret = in;
             }
         }
@@ -98,6 +98,7 @@ class Population {
         sort();
         for (int i = 0; i < count ; i++) {
            ret.saveIndividual(individuals.get(i));
+           //System.out.println("Saving elite fitness " + individuals.get(i).getFitness());
         }
         ret.setCityMap(cm);
         return ret;
@@ -121,13 +122,12 @@ class Population {
     }
     
     public String print() {
-        int i = 0;
-        String toPrint = "";
+       String toPrint = "";
         for (Individual el : individuals) {
             toPrint += el.print();
             toPrint += "\n";
         }
-        return toPrint;
+        return toPrint.trim();
     }
 
 }

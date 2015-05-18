@@ -94,8 +94,8 @@ public class Algorithm {
             for (int i = 0; i < total_cities + 2; i++) {
                 writer.println(scanner.nextLine());
             }
-            writer.println(individual_count);
-            writer.println(pop.print());
+            //writer.println(individual_count);
+            writer.print(pop.print());
             writer.close();
 
         } catch (FileNotFoundException ex) {
@@ -123,42 +123,49 @@ public class Algorithm {
             Scanner scanner = new Scanner(everything);
             total_cities = Integer.parseInt(scanner.nextLine());
             CityMap cm = CityMap.getInstance(total_cities);
-            
-            for (int i = 0; i < total_cities-1; i++) {
+
+            for (int i = 0; i < total_cities - 1; i++) {
                 String[] spl = scanner.nextLine().split(" ");
                 for (int j = 0; j < spl.length; j++) {
-                int distance = Integer.parseInt(spl[j]);
-                cm.add(distance);
+                    int distance = Integer.parseInt(spl[j]);
+                    cm.add(distance);
                 }
             }
-            
+
             System.out.println(cm);
-            
-            int population_size = Integer.parseInt(scanner.nextLine());
+
+//            int population_size = Integer.parseInt(scanner.nextLine());
             ArrayList<Individual> population = new ArrayList();
             if (individual_count == 0) {
                 // we have to use that from the input file
-                individual_count = population_size;
-                for (int i = 0; i < population_size; i++) {
+                //individual_count = population_size;
+                for (; scanner.hasNext();) {
                     String[] s = scanner.nextLine().split(" ");
-                    BitSet bs = new BitSet(total_cities);
+                    individual_count++;
+                    //BitSet bs = new BitSet(total_cities);
+                    ArrayList<Integer> gene = new ArrayList();
                     for (int j = 0; j < total_cities; j++) {
-                        if (s[j].equals("1")) {
-                            bs.set(j);
-                        }
+                        gene.add(Integer.parseInt(s[j]));
                     }
-                    Individual inew = new Individual(bs, total_cities, cm);
+                    Individual inew = new Individual(gene, cm);
                     population.add(inew);
                 }
             } else {
                 //we have to generate random population
                 Random rand = new Random();
                 for (int i = 0; i < individual_count; i++) {
-                    BitSet bs = new BitSet(total_cities);
+                    ArrayList<Integer> gene = new ArrayList();
                     for (int j = 0; j < total_cities; j++) {
-                        bs.set(j, rand.nextInt(2) == 1);
+                        boolean gen = true;
+                        while (gen) {
+                            int nxt = rand.nextInt(total_cities) + 1;
+                            if (!gene.contains(nxt)) {
+                                gene.add(nxt);
+                                gen = false;
+                            }
+                        }
                     }
-                    Individual inew = new Individual(bs, total_cities, cm);
+                    Individual inew = new Individual(gene, cm);
                     population.add(inew);
                 }
             }
@@ -175,7 +182,7 @@ public class Algorithm {
             String toPrint = "";
             toPrint += "total packages: " + total_cities + "\n";
             toPrint += cm.toString();
-            //toPrint += pop.toString();
+            toPrint += pop.toString();
             System.out.println(toPrint);
 
             Individual fittest = pop.getFittest();
@@ -184,7 +191,7 @@ public class Algorithm {
                 Individual actFit = pop.getFittest();
                 System.out.println("Generation: " + (i + 1) + " Fittest: "
                         + actFit.getFitness() + ", " + actFit + ", size: " + pop.size());
-                if (pop.getFittest().getFitness() > fittest.getFitness()) {
+                if (pop.getFittest().getFitness() < fittest.getFitness()) {
                     fittest = pop.getFittest();
                 }
                 pop = gen.evolvePopulation(pop);
